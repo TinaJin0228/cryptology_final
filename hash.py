@@ -11,8 +11,8 @@ class hash:
         binary_converted = binary_converted*binary_converted
         binary_converted = binary_converted % 16777216 #2^24 = 16777216
         self.abstract = binary_converted // 256
-        print(bin(self.abstract))
-        print(self.abstract)
+#         print(bin(self.abstract))
+#         print(self.abstract)
 
 
 
