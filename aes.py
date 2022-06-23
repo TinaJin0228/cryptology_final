@@ -1,8 +1,4 @@
 
-# add round key
-# int AddRoundKey(unsigned char(*PlainArray)[4], unsigned char(*ExtendKeyArray)[44], unsigned int MinCol){ 
-# int ret = 0;  for (int i = 0; i < 4; i++) { for (int j = 0; j < 4; j++) { PlainArray[i][j] ^= ExtendKeyArray[i][MinCol + j]; } }  return ret;}
-
 class aes:
     plainArray = {}
     cipherArray = {}
@@ -104,11 +100,58 @@ class aes:
             for k in range(4):
                 self.extendkeyArray[k][4 * i + j] = self.extendkeyArray[k][4 * i + j - 1] ^ self.extendkeyArray[k][4 * (i - 1) + j]
 
+    def encrypt(self):
+            # 加密
+        self.addRoundKey(128)
+        for i in range(9):
+            self.plain_s_substitution()
+            self.shiftRows()
+            self.mixCol()
+            self.addRoundKey(128)
+
+        self.plain_s_substitution()
+        self.shiftRows()
+        self.addRoundKey(128)
+        return self.passwordArray()
+
+    def decrypt(self):
+        # 解密
+        self.addRoundKey(128)
+        for i in range(9):
+            self.cipher_s_substitution()
+            self.reshiftRows()
+            self.mixArray()
+            self.addRoundKey(128)
+        
+        self.cipher_s_substitution()
+        self.reshiftRows()
+        self.addRoundKey(128)
+
 
 
 if __name__ == "__main__":
     c1 = aes()
     c1.plainArray = b"this is an example"
     # 加密
-    c1.addRoundKey(10)
+    c1.addRoundKey(128)
+    for i in range(9):
+        c1.plain_s_substitution()
+        c1.shiftRows()
+        c1.mixCol()
+        c1.addRoundKey(128)
+
     c1.plain_s_substitution()
+    c1.shiftRows()
+    c1.addRoundKey(128)
+
+    # 解密
+    c1.addRoundKey(128)
+    for i in range(9):
+        c1.cipher_s_substitution()
+        c1.reshiftRows()
+        c1.mixArray()
+        c1.addRoundKey(128)
+    
+    c1.cipher_s_substitution()
+    c1.reshiftRows()
+    c1.addRoundKey(128)
